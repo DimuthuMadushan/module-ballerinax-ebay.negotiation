@@ -14,13 +14,8 @@
   },
   "servers": [
     {
-      "url": "https://api.ebay.com{basePath}",
-      "description": "Production",
-      "variables": {
-        "basePath": {
-          "default": "/sell/negotiation/v1"
-        }
-      }
+      "url": "https://api.ebay.com/sell/negotiation/v1",
+      "description": "Production"
     }
   ],
   "paths": {
@@ -30,6 +25,7 @@
           "offer"
         ],
         "description": "This method evaluates a seller's current listings and returns the set of IDs that are eligible for a seller-initiated discount offer to a buyer.  <br><br>A listing ID is returned only when one or more buyers have shown an \"interest\" in the listing.  <br><br>If any buyers have shown interest in a listing, the seller can initiate a \"negotiation\" with them by calling <a href=\"/api-docs/sell/negotiation/resources/offer/methods/sendOfferToInterestedBuyers\">sendOfferToInterestedBuyers</a>, which sends all interested buyers a message that offers the listing at a discount.  <br><br>For details about how to create seller offers to buyers, see <a href=\"/api-docs/sell/static/marketing/offers-to-buyers.html\" title=\"Selling Integration Guide\">Sending offers to buyers</a>.",
+        "summary": "Find eligible items for seller offers",
         "operationId": "findEligibleItems",
         "parameters": [
           {
@@ -62,7 +58,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "A page of listings that are eligible for a seller-initiated offer",
             "content": {
               "application/json": {
                 "schema": {
@@ -130,6 +126,7 @@
           "offer"
         ],
         "description": "This method sends eligible buyers offers to purchase items in a listing at a discount.  <br><br>When a buyer has shown <i>interest</i> in a listing, they become \"eligible\" to receive a seller-initiated offer to purchase the item(s).  <br><br>Sellers use <a href=\"/api-docs/sell/negotiation/resources/offer/methods/findEligibleItems\">findEligibleItems</a> to get the set of listings that have interested buyers. If a listing has interested buyers, sellers can use this method (<b>sendOfferToInterestedBuyers</b>) to send an offer to the buyers who are interested in the listing. The offer gives buyers the ability to purchase the associated listings at a discounted price.  <br><br>For details about how to create seller offers to buyers, see <a href=\"/api-docs/sell/static/marketing/offers-to-buyers.html\" title=\"Selling Integration Guide\">Sending offers to buyers</a>.",
+        "summary": "Send offers to interested buyers",
         "operationId": "sendOfferToInterestedBuyers",
         "parameters": [
           {
@@ -165,7 +162,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "The offers that were sent to the interested buyers",
             "content": {
               "application/json": {
                 "schema": {

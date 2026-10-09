@@ -2,13 +2,14 @@
 
 The `ballerinax/ebay.negotiation` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+1. [Eligible listings report](./eligible_listings_report/eligible_listings_report.md) - Page through every listing that has interested buyers and print its ID.
+2. [Seller discount campaign](./seller_discount_campaign/seller_discount_campaign.md) - Find eligible listings and optionally send their interested buyers a percentage discount offer.
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Create an eBay developer application and obtain the client ID, client secret and a refresh token authorized for the `https://api.ebay.com/oauth/api_scope/sell.inventory` scope.
+
+2. For each example, create a `Config.toml` file in the example directory with the values documented in the example's own README.
 
 ## Running an example
 
