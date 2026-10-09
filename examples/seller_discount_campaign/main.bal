@@ -14,6 +14,9 @@ configurable string offerMessage = ?;
 configurable boolean sendOffers = false;
 
 public function main() returns error? {
+    if offerDurationDays <= 0 || offerDurationDays > int:SIGNED32_MAX_VALUE {
+        return error(string `offerDurationDays must be a positive 32-bit integer, but was ${offerDurationDays}`);
+    }
     negotiation:Client ebay = check new ({
         auth: {
             clientId,
@@ -46,15 +49,18 @@ public function main() returns error? {
         return;
     }
 
-    negotiation:SendOffersResponse response = check ebay->sendOfferToInterestedBuyers(
-        {xEBAYCMARKETPLACEID: marketplaceId, contentType: "application/json"},
-        {
-            allowCounterOffer: true,
-            message: offerMessage,
-            offerDuration: {unit: "DAY", value: <int:Signed32>offerDurationDays},
-            offeredItems
-        });
-    foreach negotiation:Offer offer in response?.offers ?: [] {
-        io:println(string `Offer ${offer?.offerId ?: "unknown"} status: ${offer?.offerStatus ?: "unknown"}`);
+    // The API accepts exactly one listing per request, so each offer is sent separately.
+    foreach negotiation:OfferedItem offeredItem in offeredItems {
+        negotiation:SendOffersResponse response = check ebay->sendOfferToInterestedBuyers(
+            {xEBAYCMARKETPLACEID: marketplaceId, contentType: "application/json"},
+            {
+                allowCounterOffer: false,
+                message: offerMessage,
+                offerDuration: {unit: "DAY", value: <int:Signed32>offerDurationDays},
+                offeredItems: [offeredItem]
+            });
+        foreach negotiation:Offer offer in response?.offers ?: [] {
+            io:println(string `Offer ${offer?.offerId ?: "unknown"} status: ${offer?.offerStatus ?: "unknown"}`);
+        }
     }
 }

@@ -11,6 +11,9 @@ configurable string marketplaceId = "EBAY_US";
 configurable int pageSize = 50;
 
 public function main() returns error? {
+    if pageSize < 1 || pageSize > 200 {
+        return error(string `pageSize must be between 1 and 200, but was ${pageSize}`);
+    }
     negotiation:Client ebay = check new ({
         auth: {
             clientId,

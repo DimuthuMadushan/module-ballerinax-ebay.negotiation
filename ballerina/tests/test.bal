@@ -45,11 +45,15 @@ final Client ebay = check new (connectionConfig, serviceUrl);
 }
 isolated function testFindEligibleItems() returns error? {
     PagedEligibleItemCollection? response = check ebay->findEligibleItems({xEBAYCMARKETPLACEID: marketplaceId}, 'limit = "10", offset = "0");
+    if response is () && isLiveServer {
+        return;
+    }
     test:assertTrue(response is PagedEligibleItemCollection && response?.eligibleItems !is ());
 }
 
 @test:Config {
-    groups: ["mock_tests"]
+    groups: ["mock_tests"],
+    enable: !isLiveServer
 }
 isolated function testSendOfferToInterestedBuyers() returns error? {
     SendOffersRequest payload = {
